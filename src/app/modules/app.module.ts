@@ -2,7 +2,9 @@ import { Module } from '@nestjs/common';
 import { AppController } from '../controllers/app.controller';
 import { AppService } from '../service/app.service';
 import { TypeOrmModule } from '@nestjs/typeorm';
-import { MasterEmployeeModule } from './masterEmployee.module';
+import { UserModule } from './user.module';
+import { AuthModule } from './auth.module';
+import { ConfigurationModule } from './confuguration.module';
 
 @Module({
   imports: [
@@ -16,7 +18,9 @@ import { MasterEmployeeModule } from './masterEmployee.module';
     entities: ['dist/**/*.entity{.ts,.js}'],
     synchronize: true,
   }),
-  MasterEmployeeModule
+  UserModule,
+  AuthModule,
+  ConfigurationModule,
 ],
   controllers: [AppController],
   providers: [AppService],

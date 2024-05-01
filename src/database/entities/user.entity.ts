@@ -1,8 +1,8 @@
 import { Column, Entity } from "typeorm";
 import { BaseEntity } from "./base.entity";
 
-@Entity({ name: 'masteremployee' })
-export class MasterEmployee extends BaseEntity {
+@Entity({ name: 'user' })
+export class User extends BaseEntity {
     @Column({
         name: 'employeeID',
         type: 'nvarchar',
