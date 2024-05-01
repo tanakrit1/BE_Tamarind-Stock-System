@@ -6,4 +6,9 @@ export class UserService {
     constructor(
         private readonly userRepository: UserRepository
     ) { }
+
+    async validate(username: string): Promise<any> {
+        return await this.userRepository.findByUsername(username);
+      }
+    
 }
