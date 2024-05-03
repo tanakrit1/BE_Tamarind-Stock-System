@@ -5,6 +5,7 @@ import { Strategy } from 'passport-local';
 import { UsernameIncorrectException } from "../exceptions/username-incorrect.exception";
 import { UserDto } from "../dto/user/user.dto";
 import { plainToInstance } from "class-transformer";
+import { UserModel } from "../models/user.model";
 
 
 
@@ -13,7 +14,7 @@ export class LocalStrategy extends PassportStrategy(Strategy) {
   constructor(private readonly authService: AuthService) {
     super();
   }
-  async validate(username: string, password: string): Promise<any> {
+  async validate(username: string, password: string): Promise<UserModel> {
     try {
       const userValidateDto ={
         username: username,

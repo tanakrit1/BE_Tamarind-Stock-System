@@ -9,7 +9,6 @@ export class UserController {
     @Post('search')
     async search( @Req() req: Request, @Body() dto:SearchUserDto) {
         try {
-            console.log(req)
             return dto
         } catch (err) {
             throw new err

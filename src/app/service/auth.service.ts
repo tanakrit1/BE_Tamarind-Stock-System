@@ -8,6 +8,8 @@ import { plainToInstance } from "class-transformer";
 import { UserDto } from "../dto/user/user.dto";
 import { omit } from 'lodash';
 import { FailedVerifyTokeyException } from "../exceptions/FailedVerifyTokeyException";
+import { AuthGenerateTokenRequestDto } from "../view-model/auth/auth-response.vm";
+import { AuthTokenModel } from "../models/auth-token.model";
 
 @Injectable()
 export class AuthService {
@@ -25,7 +27,7 @@ export class AuthService {
     return password
   }
 
-  async validateUser(authSignInRequestDto: any): Promise<any> {
+  async validateUser(authSignInRequestDto: any): Promise<UserModel> {
     const user :UserModel = await this.userService.validate(authSignInRequestDto.username) 
     if(!user){
       throw new UsernameIncorrectException();
@@ -35,7 +37,7 @@ export class AuthService {
     if (user.password !== HmacPass) {
       // await this.updateUser(userDto);
       throw new PasswordIncorrectException(
-        `รหัสผิด /${'จ้า'}`,
+        `รหัสผ่านไม่ถูฏต้อง`,
       );
     } 
     return  plainToInstance(
@@ -55,12 +57,12 @@ export class AuthService {
   
 
   getCookieJwtAccessToken(
-    payload: any,
-  ): any {
-    return {
+    payload: AuthGenerateTokenRequestDto,
+  ): AuthTokenModel {
+    return plainToInstance(AuthTokenModel,{
       token_type: 'Bearer',
       access_token: this.jwtService.sign({ payload }),
-    }
+    })
   }
 
 }

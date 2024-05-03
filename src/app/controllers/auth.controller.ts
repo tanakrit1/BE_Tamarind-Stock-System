@@ -6,6 +6,8 @@ import { LocalAuthGuard } from "../guards/local.guard";
 import { plainToInstance } from "class-transformer";
 import { UserModel } from "../models/user.model";
 import { omit } from "lodash";
+import { AuthResponseVm } from "../view-model/auth/auth-response.vm";
+import { HandleErrorException } from "../exceptions/handleErrorException.exception";
 
 @Controller('auth')
 export class AuthController {
@@ -18,20 +20,25 @@ export class AuthController {
   @UseGuards(LocalAuthGuard)
   @Post('sign-in')
   async login(@Req() request: Request): Promise<any> {
-    const user: UserModel = plainToInstance(UserModel, {
-      ...request.user,
-    });
-    const token: any = this.service.getCookieJwtAccessToken({
-      id: user.id,
-      username: user.username,
-      role: user.role,
-    });
-    return {
-      ...token, profile: omit(user, [
-        'createdAt',
-        'updatedAt',
-        'deletedAt',
-      ]),
+    try {
+      const user: UserModel = plainToInstance(UserModel, {
+        ...request.user,
+      });
+      const token: any = this.service.getCookieJwtAccessToken({
+        id: user.id,
+        username: user.username,
+        role: user.role,
+      });
+      return AuthResponseVm.convertToViewModel({
+        ...token,
+        profile: omit(user, [
+          'createdAt',
+          'updatedAt',
+          'deletedAt',
+        ]),
+      })
+    } catch (err) {
+      throw HandleErrorException(err)
     }
   }
 
