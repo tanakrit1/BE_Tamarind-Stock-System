@@ -23,8 +23,8 @@ export class FilterModelItemValueDto {
 export class FilterModelDto {
   @IsNotEmpty()
   @IsEnum(FilterModelLogicOperatorEnum)
-  linkOperator: FilterModelLogicOperatorEnum;
-
+  logicOperator: FilterModelLogicOperatorEnum;
+  
   @IsOptional()
   @IsArray()
   @Type(() => FilterModelItemDto)
@@ -42,11 +42,11 @@ export class FilterModelDto {
 export class FilterModelItemDto {
   @IsNotEmpty()
   @IsString()
-  columnField: string;
+  field: string;
 
   @IsNotEmpty()
   @IsEnum(FilterModelItemOperationEnum)
-  operatorValue: FilterModelItemOperationEnum;
+  operator: FilterModelItemOperationEnum;
 
   value: string | number | Date | string[] | number[] | Date[];
 }

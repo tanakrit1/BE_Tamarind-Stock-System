@@ -37,7 +37,7 @@ export class AuthService {
     if (user.password !== HmacPass) {
       // await this.updateUser(userDto);
       throw new PasswordIncorrectException(
-        `รหัสผ่านไม่ถูฏต้อง`,
+        `รหัสผ่านไม่ถูกต้อง`,
       );
     } 
     return  plainToInstance(

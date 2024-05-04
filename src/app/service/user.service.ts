@@ -10,5 +10,9 @@ export class UserService {
     async validate(username: string): Promise<any> {
         return await this.userRepository.findByUsername(username);
       }
+      async search(dto):Promise<any>{
+        const models = await this.userRepository.search(dto);
+        return models
+      }
     
 }
