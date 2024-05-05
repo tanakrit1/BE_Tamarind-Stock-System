@@ -10,7 +10,7 @@ export class UserController {
     constructor(private readonly userService: UserService) { }
 
     @Post('search')
-    async search(@Body() dto: SearchUserDto): Promise<any> {
+    async search(@Body() dto: SearchUserDto): Promise<UserPaginationVm> {
         try {
             const responses = await this.userService.search(dto)
             const pagination: PaginationMetadataModel = {

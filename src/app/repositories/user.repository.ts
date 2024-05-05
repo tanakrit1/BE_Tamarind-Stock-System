@@ -24,7 +24,7 @@ export class UserRepository {
     }
   }
 
-  async search(dto: any): Promise<any> {
+  async search(dto: any): Promise<UserPaginationModel> {
     try {
       const query = this.repository.createQueryBuilder('user').select('user');
       applyRepositorySortingModel(query, 'user', dto);
