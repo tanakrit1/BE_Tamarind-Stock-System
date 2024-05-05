@@ -1,4 +1,4 @@
-import { Body, Controller, Param, Patch, Post, Req } from "@nestjs/common";
+import { Body, Controller, Delete, Param, Patch, Post, Req } from "@nestjs/common";
 import { UserService } from "../service/user.service";
 import { CreateUserDto, SearchUserDto, UpdateUserDto } from "../dto/user/user.dto";
 import { PaginationMetadataModel } from "../models/base.model";
@@ -71,6 +71,23 @@ export class UserController {
       const updated: UserModel = await this.userService.update(updateDto);
       return UserResponseVm.convertToViewModel(updated);
     }catch(err){
+      throw HandleErrorException(err);
+    }
+  }
+
+  @Delete('/:username')
+  async delete(@Param('username') username: string): Promise<UserResponseVm> {
+    try {
+      const user = await this.userService.validate(username);
+      if (!user) {
+        throw new NotFoundException(
+          { field: 'username', value: username },
+          `ไม่พบข้อมูลของผู้ใช้ ${username}`,
+        );
+      }
+      const deleted: UserModel = await this.userService.delete(user);
+      return UserResponseVm.convertToViewModel(deleted);
+    } catch (err) {
       throw HandleErrorException(err);
     }
   }

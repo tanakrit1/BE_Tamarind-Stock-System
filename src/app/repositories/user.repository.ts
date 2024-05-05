@@ -57,4 +57,14 @@ export class UserRepository {
     }
   }
 
+  async delete(model: UserModel): Promise<UserModel> {
+    try {
+      const entity: UserModel = this.repository.create(model);
+      const deleted: UserModel = await this.repository.softRemove(entity);
+      return deleted;
+    } catch (err) {
+      throw new InternalServerErrorException(err.message + err?.query);
+    }
+  }
+
 }

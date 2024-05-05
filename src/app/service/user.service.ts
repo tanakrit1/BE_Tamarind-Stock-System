@@ -26,4 +26,8 @@ export class UserService {
     return await this.userRepository.save(model);
   }
 
+  async delete(model: UserModel): Promise<UserModel> {
+    return await this.userRepository.delete(model);
+  }
+
 }
