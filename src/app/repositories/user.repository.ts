@@ -47,4 +47,14 @@ export class UserRepository {
     }
   }
 
+  async save(model: UserModel): Promise<UserModel> {
+    try {
+      const entity: UserModel = this.repository.create(model);
+      const saved: UserModel = await this.repository.save(entity);
+      return saved;
+    } catch (err) {
+      throw new InternalServerErrorException(err.message + err?.query);
+    }
+  }
+
 }

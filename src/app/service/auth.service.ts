@@ -10,6 +10,7 @@ import { omit } from 'lodash';
 import { FailedVerifyTokeyException } from "../exceptions/FailedVerifyTokeyException";
 import { AuthGenerateTokenRequestDto } from "../view-model/auth/auth-response.vm";
 import { AuthTokenModel } from "../models/auth-token.model";
+import * as crypto from 'node:crypto';
 
 @Injectable()
 export class AuthService {
@@ -19,12 +20,11 @@ export class AuthService {
   ) { }
 
   hashPassword(password: string): string {
-    // const hash = crypto
-    //   .createHmac('sha256', process.env.PASSWORD_SECRET)
-    //   .update(password)
-    //   .digest('hex');
-    // return hash;
-    return password
+    const hash = crypto
+      .createHmac('sha256', process.env.PASSWORD_SECRET)
+      .update(password)
+      .digest('hex');
+    return hash;
   }
 
   async validateUser(authSignInRequestDto: any): Promise<UserModel> {
