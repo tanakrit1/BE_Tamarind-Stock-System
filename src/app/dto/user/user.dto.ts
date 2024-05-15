@@ -5,7 +5,6 @@ import {
   IsNotEmpty,
   IsOptional,
   IsString,
-  IsStrongPassword,
   MaxLength,
 } from 'class-validator';
 
@@ -17,8 +16,6 @@ export class SearchUserDto extends PaginationDto {
   @IsString()
   employeeID: string;
 }
-
-
 
 
 export class CreateUserDto {
@@ -37,13 +34,14 @@ export class CreateUserDto {
 
   @IsNotEmpty()
   @IsString()
-  @IsStrongPassword(
-    { minLength: 12 },
-    {
-      message:
-        'รหัสผ่าน ต้องความยาวไม่น้อยกว่า 12 ตัวอักษร และประกอบด้วยตัวพิมพ์ใหญ่ ตัวพิมพ์เล็ก ตัวเลข และอักขระพิเศษ',
-    },
-  )
+  @MaxLength(8, {message:'password ต้องมีความยาวไม่เกิน 8 ตัวอักษร'})
+  // @IsStrongPassword(
+  //   { minLength: 12 },
+  //   {
+  //     message:
+  //       'รหัสผ่าน ต้องความยาวไม่น้อยกว่า 12 ตัวอักษร และประกอบด้วยตัวพิมพ์ใหญ่ ตัวพิมพ์เล็ก ตัวเลข และอักขระพิเศษ',
+  //   },
+  // )
   password: string;
 
 
@@ -75,13 +73,14 @@ export class UpdateUserDto {
 
   @IsOptional()
   @IsString()
-  @IsStrongPassword(
-    { minLength: 12 },
-    {
-      message:
-        'รหัสผ่าน ต้องความยาวไม่น้อยกว่า 12 ตัวอักษร และประกอบด้วยตัวพิมพ์ใหญ่ ตัวพิมพ์เล็ก ตัวเลข และอักขระพิเศษ',
-    },
-  )
+  @MaxLength(8, {message:'password ต้องมีความยาวไม่เกิน 8 ตัวอักษร'})
+  // @IsStrongPassword(
+  //   { minLength: 12 },
+  //   {
+  //     message:
+  //       'รหัสผ่าน ต้องความยาวไม่น้อยกว่า 12 ตัวอักษร และประกอบด้วยตัวพิมพ์ใหญ่ ตัวพิมพ์เล็ก ตัวเลข และอักขระพิเศษ',
+  //   },
+  // )
   password: string;
 
 
