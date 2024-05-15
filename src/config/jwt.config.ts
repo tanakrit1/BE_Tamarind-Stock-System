@@ -8,7 +8,7 @@ export const jwtConfig: JwtModuleAsyncOptions = {
     const secretKey = configService.get<string>('JWT_SECRET_KEY');
     return {
       secret: secretKey,
-      signOptions: { expiresIn: '1800s' },
+      // signOptions: { expiresIn: '5s' },
     };
   },
 };
