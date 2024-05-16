@@ -11,10 +11,11 @@ export class DuplicateDataException extends HttpException {
         statusCode: HttpStatus.CONFLICT,
         statusText: HttpStatus[HttpStatus.CONFLICT],
         description,
-        message: ErrorCodeEnum[ErrorCodeEnum[index]],
+        message: [ErrorCodeEnum[ErrorCodeEnum[index]]],
         value: value,
       },
       HttpStatus.CONFLICT,
     );
   }
 }
+
