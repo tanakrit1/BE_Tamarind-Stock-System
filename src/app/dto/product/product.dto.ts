@@ -31,3 +31,26 @@ export class CreateProductDto {
     @MaxLength(8, { message: 'price ต้องมีความยาวไม่เกิน' })
     price: string;
 }
+
+export class UpdateProductDto {
+
+    @IsOptional()
+    @IsString()
+    @MaxLength(8, { message: 'specialID ต้องมีความยาวไม่เกิน' })
+    specialID: string;
+
+    @IsOptional()
+    @IsString()
+    @MaxLength(64, { message: 'name ต้องมีความยาวไม่เกิน' })
+    name: string;
+
+    @IsOptional()
+    @IsString()
+    @MaxLength(32, { message: 'type ต้องมีความยาวไม่เกิน' })
+    type: string;
+
+    @IsOptional()
+    @IsString()
+    @MaxLength(8, { message: 'price ต้องมีความยาวไม่เกิน' })
+    price: string;
+}

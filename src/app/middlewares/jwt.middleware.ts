@@ -32,6 +32,8 @@ export class JwtAuthMiddleware implements NestMiddleware {
             : new UnauthorizedException(err.message);
         throw error;
       }
+    }else{
+      throw new UnauthorizedException()
     }
     next();
   }

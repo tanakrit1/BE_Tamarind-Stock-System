@@ -22,7 +22,7 @@ export const HandleErrorException = (error: {
     return new HttpException(error?.getResponse(), error?.getStatus());
   } else if (error instanceof InternalServerErrorException) {
     const message = error.message;
-    if (message?.includes('Violation of UNIQUE KEY constraint')) {
+    if (message?.includes('Violation of UNIQUE KEY constraint')|| message?.includes('Duplicate entry')) {
       const regex = /duplicate key value is \((.*?)\)/;
       const match = message.match(regex);
       if (match && match.length > 1) {
@@ -31,6 +31,18 @@ export const HandleErrorException = (error: {
           `ข้อมูลที่มีค่าเป็น '${duplicatedValue}' ถูกใช้งานแล้วไม่สามารถบันทึกค่าซ้ำลงระบบได้`,
           duplicatedValue,
         );
+      }else {
+        // Handle MySQL-specific duplicate entry error
+        const mysqlRegex = /Duplicate entry '(.+)' for key '(.+)'/;
+        const mysqlMatch = message.match(mysqlRegex);
+        if (mysqlMatch && mysqlMatch.length > 2) {
+          const duplicatedValue = mysqlMatch[1];
+          const keyName = mysqlMatch[2];
+          return new DuplicateDataException(
+            `ข้อมูลที่มีค่าเป็น '${duplicatedValue}' สำหรับคีย์ '${keyName}' ถูกใช้งานแล้วไม่สามารถบันทึกค่าซ้ำลงระบบได้`,
+            duplicatedValue,
+          );
+        }
       }
     }
     if (message?.includes('invalid data length or metadata length')) {

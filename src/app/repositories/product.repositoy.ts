@@ -13,6 +13,17 @@ export class ProductRepository {
         private readonly repository: Repository<Product>
     ) { }
 
+    async findById(id: number): Promise<ProductModel> {
+        try {
+            const product: ProductModel = await this.repository.findOne({
+                where: { id: id },
+            });
+            return product;
+        } catch (err) {
+            throw new InternalServerErrorException(err.message + err?.query);
+        }
+    }
+
     async search(dto: any): Promise<ProductPaginationModel> {
         try {
             const query = this.repository.createQueryBuilder('product').select('product');
@@ -39,6 +50,16 @@ export class ProductRepository {
             return saved;
         } catch (err) {
             throw new InternalServerErrorException(err.message + err?.query);
+        }
+    }
+
+    async delete(model: ProductModel): Promise<ProductModel> {
+        try {
+          const entity: ProductModel = this.repository.create(model);
+          const deleted: ProductModel = await this.repository.softRemove(entity);
+          return deleted;
+        } catch (err) {
+          throw new InternalServerErrorException(err.message + err?.query);
         }
     }
 }
