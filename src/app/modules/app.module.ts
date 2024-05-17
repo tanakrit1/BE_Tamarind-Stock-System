@@ -8,6 +8,7 @@ import { ConfigurationModule } from './confuguration.module';
 import { JwtAuthMiddleware } from '../middlewares/jwt.middleware';
 import { ProductModule } from './product.module';
 import { ProductSubscriber } from 'src/database/subscribers/product.subscriber';
+import { SupplierModule } from './supplier.module';
 
 @Module({
   imports: [
@@ -25,7 +26,8 @@ import { ProductSubscriber } from 'src/database/subscribers/product.subscriber';
   UserModule,
   AuthModule,
   ConfigurationModule,
-  ProductModule
+  ProductModule,
+  SupplierModule
 ],
   controllers: [AppController],
   providers: [AppService],
