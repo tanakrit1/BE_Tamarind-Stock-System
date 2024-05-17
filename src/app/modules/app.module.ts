@@ -9,6 +9,7 @@ import { JwtAuthMiddleware } from '../middlewares/jwt.middleware';
 import { ProductModule } from './product.module';
 import { ProductSubscriber } from 'src/database/subscribers/product.subscriber';
 import { SupplierModule } from './supplier.module';
+import { SupplierSubscriber } from 'src/database/subscribers/supplier.subscriber';
 
 @Module({
   imports: [
@@ -20,7 +21,7 @@ import { SupplierModule } from './supplier.module';
     password: '',
     database: 'tamarind-stock',
     entities: ['dist/**/*.entity{.ts,.js}'],
-    subscribers:[ProductSubscriber],
+    subscribers:[ProductSubscriber,SupplierSubscriber],
     synchronize: true,
   }),
   UserModule,

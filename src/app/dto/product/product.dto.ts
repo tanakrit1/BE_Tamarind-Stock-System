@@ -11,7 +11,7 @@ export class SearchProductDto extends PaginationDto {
 
 export class CreateProductDto {
 
-    @IsNotEmpty()
+    @IsOptional()
     @IsString()
     @MaxLength(8, { message: 'specialID ต้องมีความยาวไม่เกิน' })
     specialID: string;

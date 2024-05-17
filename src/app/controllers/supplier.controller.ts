@@ -1,7 +1,7 @@
 import { Body, Controller, Post } from "@nestjs/common";
 import { SupplierService } from "../service/supplier.service";
-import { SearchSupplierDto } from "../dto/supplier/supplier.dto";
-import { SupplierPaginationVm } from "../view-model/supplier/supplier.vm";
+import { CreateSupplierDto, SearchSupplierDto } from "../dto/supplier/supplier.dto";
+import { SupplierPaginationVm, SupplierResponseVm } from "../view-model/supplier/supplier.vm";
 import { PaginationMetadataModel } from "../models/base.model";
 import { HandleErrorException } from "../exceptions/handleErrorException.exception";
 
@@ -23,6 +23,17 @@ export class SupplierController {
       return SupplierPaginationVm.convertToViewModel(responses, pagination)
     } catch (err) {
       console.log(err)
+      throw HandleErrorException(err);
+    }
+  }
+
+  
+  @Post()
+  async create(@Body() dto: CreateSupplierDto): Promise<SupplierResponseVm> {
+    try {
+      const created = await this.supplierService.create(dto);
+      return SupplierResponseVm.convertToViewModel(created);
+    } catch (err) {
       throw HandleErrorException(err);
     }
   }
