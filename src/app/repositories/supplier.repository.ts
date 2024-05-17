@@ -13,6 +13,18 @@ export class SupplierRepository {
         private readonly repository: Repository<Supplier>
     ) { }
 
+
+    async findById(id: number): Promise<SupplierModel> {
+        try {
+            const supplier: SupplierModel = await this.repository.findOne({
+                where: { id: id },
+            });
+            return supplier;
+        } catch (err) {
+            throw new InternalServerErrorException(err.message + err?.query);
+        }
+    }
+
     async search(dto: any): Promise<SupplierPaginationModel> {
         try {
             const query = this.repository.createQueryBuilder('supplier').select('supplier');
@@ -39,6 +51,16 @@ export class SupplierRepository {
             return saved;
         } catch (err) {
             throw new InternalServerErrorException(err.message + err?.query);
+        }
+    }
+
+    async delete(model: SupplierModel): Promise<SupplierModel> {
+        try {
+          const entity: SupplierModel = this.repository.create(model);
+          const deleted: SupplierModel = await this.repository.softRemove(entity);
+          return deleted;
+        } catch (err) {
+          throw new InternalServerErrorException(err.message + err?.query);
         }
     }
 

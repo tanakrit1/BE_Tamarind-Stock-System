@@ -55,3 +55,51 @@ export class CreateSupplierDto {
     @MaxLength(16, { message: 'phone ต้องมีความยาวไม่เกิน' })
     phone: string;
 }
+
+export class UpdateSupplierDto {
+
+    @IsOptional()
+    @IsString()
+    @MaxLength(8, { message: 'specialID ต้องมีความยาวไม่เกิน' })
+    specialID: string;
+
+    @IsOptional()
+    @IsString()
+    @MaxLength(64, { message: 'firstName ต้องมีความยาวไม่เกิน' })
+    firstName: string;
+
+    @IsOptional()
+    @IsString()
+    @MaxLength(64, { message: 'lastName ต้องมีความยาวไม่เกิน' })
+    lastName: string;
+
+    @IsOptional()
+    @IsString()
+    @MaxLength(64, { message: 'address ต้องมีความยาวไม่เกิน' })
+    address: string;
+
+    @IsOptional()
+    @IsString()
+    @MaxLength(64, { message: 'subDistric ต้องมีความยาวไม่เกิน' })
+    subDistric: string;
+
+    @IsOptional()
+    @IsString()
+    @MaxLength(64, { message: 'distric ต้องมีความยาวไม่เกิน' })
+    distric: string;
+
+    @IsOptional()
+    @IsString()
+    @MaxLength(64, { message: 'province ต้องมีความยาวไม่เกิน' })
+    province: string;
+
+    @IsOptional()
+    @IsString()
+    @MaxLength(8, { message: 'zipCode ต้องมีความยาวไม่เกิน' })
+    zipCode: string;
+
+    @IsOptional()
+    @IsString()
+    @MaxLength(16, { message: 'phone ต้องมีความยาวไม่เกิน' })
+    phone: string;
+}
