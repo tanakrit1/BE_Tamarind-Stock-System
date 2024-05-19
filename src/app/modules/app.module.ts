@@ -10,6 +10,8 @@ import { ProductModule } from './product.module';
 import { ProductSubscriber } from 'src/database/subscribers/product.subscriber';
 import { SupplierModule } from './supplier.module';
 import { SupplierSubscriber } from 'src/database/subscribers/supplier.subscriber';
+import { CustomerModule } from './customer.module';
+import { CustomerSubscriber } from 'src/database/subscribers/customer.subscriber';
 
 @Module({
   imports: [
@@ -21,14 +23,15 @@ import { SupplierSubscriber } from 'src/database/subscribers/supplier.subscriber
     password: '',
     database: 'tamarind-stock',
     entities: ['dist/**/*.entity{.ts,.js}'],
-    subscribers:[ProductSubscriber,SupplierSubscriber],
+    subscribers:[ProductSubscriber,SupplierSubscriber,CustomerSubscriber],
     synchronize: true,
   }),
   UserModule,
   AuthModule,
   ConfigurationModule,
   ProductModule,
-  SupplierModule
+  SupplierModule,
+  CustomerModule
 ],
   controllers: [AppController],
   providers: [AppService],

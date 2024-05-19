@@ -1,8 +1,8 @@
 import { Column, Entity } from "typeorm";
 import { BaseEntity } from "./base.entity";
 
-@Entity({ name: 'supplier' })
-export class Supplier extends BaseEntity {
+@Entity({ name: 'customer' })
+export class Customer extends BaseEntity {
 
     @Column({ name: 'specialID', type: 'nvarchar', length: 8 })
     specialID: string;  
@@ -30,11 +30,5 @@ export class Supplier extends BaseEntity {
 
     @Column({ name: 'phone', type: 'nvarchar', length: 16 ,unique: true, })
     phone: string; 
+
 }
-
-
-
-
-
-
-
