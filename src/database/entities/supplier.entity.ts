@@ -1,5 +1,6 @@
-import { Column, Entity } from "typeorm";
+import { Column, Entity, OneToMany } from "typeorm";
 import { BaseEntity } from "./base.entity";
+import { Transaction_Import } from "./transaction_import.entity";
 
 @Entity({ name: 'supplier' })
 export class Supplier extends BaseEntity {
@@ -30,6 +31,9 @@ export class Supplier extends BaseEntity {
 
     @Column({ name: 'phone', type: 'nvarchar', length: 16 ,unique: true, })
     phone: string; 
+
+    @OneToMany(() => Transaction_Import, (Transaction_Import) => Transaction_Import.supplier)
+    Transaction_Imports: Transaction_Import[];
 }
 
 

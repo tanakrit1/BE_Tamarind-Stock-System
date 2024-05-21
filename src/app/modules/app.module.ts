@@ -12,6 +12,7 @@ import { SupplierModule } from './supplier.module';
 import { SupplierSubscriber } from 'src/database/subscribers/supplier.subscriber';
 import { CustomerModule } from './customer.module';
 import { CustomerSubscriber } from 'src/database/subscribers/customer.subscriber';
+import { Transaction_ImportModule } from './transaction_import.module';
 
 @Module({
   imports: [
@@ -31,7 +32,8 @@ import { CustomerSubscriber } from 'src/database/subscribers/customer.subscriber
   ConfigurationModule,
   ProductModule,
   SupplierModule,
-  CustomerModule
+  CustomerModule,
+  Transaction_ImportModule
 ],
   controllers: [AppController],
   providers: [AppService],
