@@ -25,6 +25,17 @@ export class SupplierRepository {
         }
     }
 
+    async findByPhone(phone: string): Promise<SupplierModel> {
+        try {
+            const supplier: SupplierModel = await this.repository.findOne({
+                where: { phone: phone },
+            });
+            return supplier;
+        } catch (err) {
+            throw new InternalServerErrorException(err.message + err?.query);
+        }
+    }
+
     async search(dto: any): Promise<SupplierPaginationModel> {
         try {
             const query = this.repository.createQueryBuilder('supplier').select('supplier');

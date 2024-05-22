@@ -1,9 +1,10 @@
-import { Body, Controller, Post } from "@nestjs/common";
+import { Body, Controller, Post, Req } from "@nestjs/common";
 import { Transaction_ImportService } from "../service/transaction_import.service";
-import { SearchTransaction_ImportDto } from "../dto/transaction_import/transaction_import.dto";
-import { Transaction_ImportPaginationVm } from "../view-model/transaction_import/transaction_import.vm";
+import { CreateTransaction_ImportDto, SearchTransaction_ImportDto } from "../dto/transaction_import/transaction_import.dto";
+import { Transaction_ImportPaginationVm, Transaction_ImportResponseVm } from "../view-model/transaction_import/transaction_import.vm";
 import { PaginationMetadataModel } from "../models/base.model";
 import { HandleErrorException } from "../exceptions/handleErrorException.exception";
+import { Request } from "express";
 
 @Controller('transaction_import')
 export class Transaction_ImportController {
@@ -26,4 +27,17 @@ export class Transaction_ImportController {
         throw HandleErrorException(err);
       }
     }
+
+    @Post()
+    async create(@Req() request: Request,@Body() dto: CreateTransaction_ImportDto): Promise<Transaction_ImportResponseVm> {
+      try {
+        const user_id = request.user['id']
+        dto.user_id= Number(user_id)
+        const created = await this.transaction_importService.create(dto);
+        return Transaction_ImportResponseVm.convertToViewModel(created);
+      } catch (err) {
+        throw HandleErrorException(err);
+      }
+    }
+  
 }

@@ -14,6 +14,10 @@ export class SupplierService {
         return await this.supplierRepository.findById(id);
     }
 
+    async findByPhone(phone: string): Promise<SupplierModel> {
+        return await this.supplierRepository.findByPhone(phone);
+    }
+
     async search(dto): Promise<SupplierPaginationModel> {
         const models = await this.supplierRepository.search(dto);
         return models

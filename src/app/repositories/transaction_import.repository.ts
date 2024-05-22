@@ -2,7 +2,7 @@ import { Injectable, InternalServerErrorException } from "@nestjs/common";
 import { InjectRepository } from "@nestjs/typeorm";
 import { Transaction_Import } from "src/database/entities/transaction_import.entity";
 import { Repository } from "typeorm";
-import { Transaction_ImportPaginationModel } from "../models/transaction_import.model";
+import { Transaction_ImportModel, Transaction_ImportPaginationModel } from "../models/transaction_import.model";
 import { plainToInstance } from "class-transformer";
 import { applyRepositoryFilterModel, applyRepositoryQuickFilter, applyRepositorySortingModel } from "../utils/repository.utils";
 
@@ -31,6 +31,16 @@ export class Transaction_ImportRepository {
                 transaction_imports: transaction_imports,
                 totalItems: count,
             } as Transaction_ImportPaginationModel);
+        } catch (err) {
+            throw new InternalServerErrorException(err.message + err?.query);
+        }
+    }
+
+    async save(model: Transaction_ImportModel): Promise<Transaction_ImportModel> {
+        try {
+            const entity: Transaction_ImportModel = this.repository.create(model);
+            const saved: Transaction_ImportModel = await this.repository.save(entity);
+            return saved;
         } catch (err) {
             throw new InternalServerErrorException(err.message + err?.query);
         }
