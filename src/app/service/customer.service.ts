@@ -14,6 +14,10 @@ export class CustomerService {
         return await this.customerRepository.findById(id);
     }
 
+    async findByPhone(phone: string): Promise<CustomerModel> {
+        return await this.customerRepository.findByPhone(phone);
+    }
+
     async search(dto): Promise<CustomerPaginationModel> {
         const models = await this.customerRepository.search(dto);
         return models

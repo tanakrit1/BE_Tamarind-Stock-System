@@ -1,6 +1,7 @@
 import { Column, Entity, OneToMany } from "typeorm";
 import { BaseEntity } from "./base.entity";
 import { Transaction_Import } from "./transaction_import.entity";
+import { Transaction_Export } from "./transaction_export.entity";
 
 @Entity({ name: 'user' })
 export class User extends BaseEntity {
@@ -29,5 +30,8 @@ export class User extends BaseEntity {
 
     @OneToMany(() => Transaction_Import, (Transaction_Import) => Transaction_Import.user)
     Transaction_Imports: Transaction_Import[];
+
+    @OneToMany(() => Transaction_Export, (Transaction_Export) => Transaction_Export.user)
+    Transaction_Exports: Transaction_Export[];
 
 }

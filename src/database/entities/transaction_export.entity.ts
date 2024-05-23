@@ -2,10 +2,10 @@ import { Column, Entity, ManyToOne } from "typeorm";
 import { User } from "./user.entity";
 import { BaseEntity } from "./base.entity";
 import { Product } from "./product.entity";
-import { Supplier } from "./supplier.entity";
+import { Customer } from "./customer.entity";
 
-@Entity({ name: 'transaction-import' })
-export class Transaction_Import extends BaseEntity {
+@Entity({ name: 'transaction-export' })
+export class Transaction_Export extends BaseEntity {
 
     @Column({ name: 'quantity', type: 'nvarchar', length: 16, nullable: true, })
     quantity: string;
@@ -31,12 +31,12 @@ export class Transaction_Import extends BaseEntity {
     @Column({ name: 'typeAction', type: 'nvarchar', length: 16, nullable: true, })
     typeAction: string;
 
-    @ManyToOne(() => User, (user) => user.Transaction_Imports, { nullable: true })
+    @ManyToOne(() => User, (user) => user.Transaction_Exports, { nullable: true })
     user: User;
 
-    @ManyToOne(() => Product, (product) => product.Transaction_Imports, { nullable: true })
+    @ManyToOne(() => Product, (product) => product.Transaction_Exports, { nullable: true })
     product: Product;
 
-    @ManyToOne(() => Supplier, (supplier) => supplier.Transaction_Imports, { nullable: true })
-    supplier: Supplier;
+    @ManyToOne(() => Customer, (customer) => customer.Transaction_Exports, { nullable: true })
+    customer: Customer;
 }

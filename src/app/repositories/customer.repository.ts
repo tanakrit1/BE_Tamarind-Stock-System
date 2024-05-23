@@ -24,6 +24,17 @@ export class CustomerRepository {
         }
     }
 
+    async findByPhone(phone: string): Promise<CustomerModel> {
+        try {
+            const customer: CustomerModel = await this.repository.findOne({
+                where: { phone: phone },
+            });
+            return customer;
+        } catch (err) {
+            throw new InternalServerErrorException(err.message + err?.query);
+        }
+    }
+
     
     async search(dto: any): Promise<CustomerPaginationModel> {
         try {
