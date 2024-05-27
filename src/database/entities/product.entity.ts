@@ -15,9 +15,24 @@ export class Product extends BaseEntity {
     @Column({ name: 'type', type: 'nvarchar', length: 32 })
     type: string;  
 
-    @Column({ name: 'price', type: 'nvarchar', length: 8 })
-    price: string;  
+    @Column({
+        name: 'price',
+        type: 'decimal',
+        precision: 18,
+        scale: 2,
+        nullable: true,
+    })
+    price: number;
 
+    @Column({
+        name: 'priceOut',
+        type: 'decimal',
+        precision: 18,
+        scale: 2,
+        nullable: true,
+    })
+    priceOut: number;
+    
     @OneToMany(() => Transaction_Import, (Transaction_Import) => Transaction_Import.product)
     Transaction_Imports: Transaction_Import[];
 

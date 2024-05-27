@@ -1,6 +1,6 @@
 import { Product } from "src/database/entities/product.entity";
 import { PaginationDto } from "../base/base.dto";
-import { IsNotEmpty, IsOptional, IsString, MaxLength } from "class-validator";
+import { IsNotEmpty, IsNumber, IsOptional, IsString, MaxLength } from "class-validator";
 
 export class ProductDto extends Product { }
 
@@ -26,10 +26,13 @@ export class CreateProductDto {
     @MaxLength(32, { message: 'type ต้องมีความยาวไม่เกิน' })
     type: string;
 
-    @IsNotEmpty()
-    @IsString()
-    @MaxLength(8, { message: 'price ต้องมีความยาวไม่เกิน' })
-    price: string;
+    @IsOptional()
+    @IsNumber()
+    price: number;
+
+    @IsOptional()
+    @IsNumber()
+    priceOut: number;
 }
 
 export class UpdateProductDto {
@@ -50,7 +53,10 @@ export class UpdateProductDto {
     type: string;
 
     @IsOptional()
-    @IsString()
-    @MaxLength(8, { message: 'price ต้องมีความยาวไม่เกิน' })
-    price: string;
+    @IsNumber()
+    price: number;
+
+    @IsOptional()
+    @IsNumber()
+    priceOut: number;
 }
