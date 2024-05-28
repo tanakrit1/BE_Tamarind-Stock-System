@@ -33,6 +33,7 @@ export class Transaction_ExportController {
       try {
         const user_id = request.user['id']
         dto.user_id= Number(user_id)
+        dto.exportDate=new Date()
         const created = await this.transaction_exportService.create(dto);
         return Transaction_ExportResponseVm.convertToViewModel(created);
       } catch (err) {

@@ -1,6 +1,6 @@
 import { Transaction_Import } from "src/database/entities/transaction_import.entity";
 import { PaginationDto } from "../base/base.dto";
-import { IsNotEmpty, IsNumber, IsOptional, IsString, MaxLength } from "class-validator";
+import { IsDate, IsNotEmpty, IsNumber, IsOptional, IsString, MaxLength } from "class-validator";
 
 export class Transaction_ImportDto extends Transaction_Import { }
 
@@ -31,6 +31,10 @@ export class CreateTransaction_ImportDto {
   @IsString()
   @MaxLength(16, { message: 'typeAction ต้องมีความยาวไม่เกิน' })
   typeAction: string;
+
+  @IsOptional()
+  @IsDate({message:'importDate ต้องเป็นวันที่'})
+  importDate: Date;
   //-------------------------------------------------------------------//
   @IsNotEmpty()
   @IsNumber()

@@ -33,6 +33,7 @@ export class Transaction_ImportController {
       try {
         const user_id = request.user['id']
         dto.user_id= Number(user_id)
+        dto.importDate= new Date()
         const created = await this.transaction_importService.create(dto);
         return Transaction_ImportResponseVm.convertToViewModel(created);
       } catch (err) {

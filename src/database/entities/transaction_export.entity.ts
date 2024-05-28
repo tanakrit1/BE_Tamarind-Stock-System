@@ -28,6 +28,15 @@ export class Transaction_Export extends BaseEntity {
     })
     priceDeposit: number;
 
+    @Column({
+        name: 'exportDate',
+        type: 'date',
+        nullable: true,
+        comment: 'วันที่ส่งออก',
+      })
+      exportDate: Date;
+
+    
     @Column({ name: 'typeAction', type: 'nvarchar', length: 16, nullable: true, })
     typeAction: string;
 
