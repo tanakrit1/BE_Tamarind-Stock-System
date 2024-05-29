@@ -2,6 +2,7 @@ import { Column, Entity, OneToMany } from "typeorm";
 import { BaseEntity } from "./base.entity";
 import { Transaction_Import } from "./transaction_import.entity";
 import { Transaction_Export } from "./transaction_export.entity";
+import { Import_Deposit } from "./import_deposit.entity";
 
 @Entity({ name: 'product' })
 export class Product extends BaseEntity {
@@ -36,6 +37,9 @@ export class Product extends BaseEntity {
     @OneToMany(() => Transaction_Import, (Transaction_Import) => Transaction_Import.product)
     Transaction_Imports: Transaction_Import[];
 
-    @OneToMany(() => Transaction_Export, (Transaction_Export) => Transaction_Export.user)
+    @OneToMany(() => Transaction_Export, (Transaction_Export) => Transaction_Export.product)
     Transaction_Exports: Transaction_Export[];
+
+    @OneToMany(() => Import_Deposit, (Import_Deposit) => Import_Deposit.product)
+    Import_Deposits: Import_Deposit[];
 }

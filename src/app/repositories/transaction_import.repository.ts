@@ -15,14 +15,14 @@ export class Transaction_ImportRepository {
 
     async search(dto: any): Promise<Transaction_ImportPaginationModel> {
         try {
-            const query = this.repository.createQueryBuilder('transaction_import').select('transaction_import')
+            const query = this.repository.createQueryBuilder('transaction-import').select('transaction-import')
                 .addSelect(['user.id', 'user.firstName', 'user.lastName', 'user.role'])
-                .leftJoin('transaction_import.user', 'user')
-                .leftJoinAndSelect('transaction_import.product', 'product')
-                .leftJoinAndSelect('transaction_import.supplier', 'supplier')
-            applyRepositorySortingModel(query, 'transaction_import', dto);
-            applyRepositoryQuickFilter(query, 'transaction_import', dto.filterModel);
-            applyRepositoryFilterModel(query, 'transaction_import', dto.filterModel);
+                .leftJoin('transaction-import.user', 'user')
+                .leftJoinAndSelect('transaction-import.product', 'product')
+                .leftJoinAndSelect('transaction-import.supplier', 'supplier')
+            applyRepositorySortingModel(query, 'transaction-import', dto);
+            applyRepositoryQuickFilter(query, 'transaction-import', dto.filterModel);
+            applyRepositoryFilterModel(query, 'transaction-import', dto.filterModel);
 
             query.skip((dto.page - 1) * dto.limit).take(dto.limit);
             const queryResult = await query.getManyAndCount();
