@@ -3,6 +3,7 @@ import { BaseEntity } from "./base.entity";
 import { Transaction_Import } from "./transaction_import.entity";
 import { Transaction_Export } from "./transaction_export.entity";
 import { Import_Deposit } from "./import_deposit.entity";
+import { Export_Deposit } from "./export_disposit.entity";
 
 @Entity({ name: 'product' })
 export class Product extends BaseEntity {
@@ -42,4 +43,7 @@ export class Product extends BaseEntity {
 
     @OneToMany(() => Import_Deposit, (Import_Deposit) => Import_Deposit.product)
     Import_Deposits: Import_Deposit[];
+
+    @OneToMany(() => Export_Deposit, (Export_Deposit) => Export_Deposit.product)
+    Export_Deposits: Export_Deposit[];
 }

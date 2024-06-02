@@ -1,8 +1,9 @@
-import { Column, Entity, ManyToOne } from "typeorm";
+import { Column, Entity, ManyToOne, OneToMany } from "typeorm";
 import { BaseEntity } from "./base.entity";
 import { User } from "./user.entity";
 import { Product } from "./product.entity";
 import { Supplier } from "./supplier.entity";
+import { Export_Deposit } from "./export_disposit.entity";
 
 @Entity({ name: 'import-deposit' })
 export class Import_Deposit extends BaseEntity {
@@ -46,6 +47,9 @@ export class Import_Deposit extends BaseEntity {
 
     @ManyToOne(() => Supplier, (supplier) => supplier.Import_Deposits, { nullable: true })
     supplier: Supplier;
+
+    @OneToMany(() => Export_Deposit, (Export_Deposit) => Export_Deposit.Import_Deposit)
+    Export_Deposits: Export_Deposit[];
 
    //exportID
 }
