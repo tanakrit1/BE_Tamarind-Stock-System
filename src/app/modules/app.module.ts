@@ -15,6 +15,7 @@ import { CustomerSubscriber } from 'src/database/subscribers/customer.subscriber
 import { Transaction_ImportModule } from './transaction_import.module';
 import { Transaction_ExportModule } from './transaction_export.module';
 import { Import_DepositModule } from './import_deposit.module';
+import { Export_DepositModule } from './export_deposit.module';
 
 @Module({
   imports: [
@@ -37,7 +38,8 @@ import { Import_DepositModule } from './import_deposit.module';
   CustomerModule,
   Transaction_ImportModule,
   Transaction_ExportModule,
-  Import_DepositModule
+  Import_DepositModule,
+  Export_DepositModule
 ],
   controllers: [AppController],
   providers: [AppService],
