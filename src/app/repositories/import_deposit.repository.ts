@@ -13,6 +13,17 @@ export class Import_DepositRepository {
         private readonly repository: Repository<Import_Deposit>
     ) { }
 
+    async findById(id: number): Promise<Import_DepositModel> {
+        try {
+          const Import_Deposit: Import_DepositModel = await this.repository.findOne({
+            where: { id: id },
+          });
+          return Import_Deposit;
+        } catch (err) {
+          throw new InternalServerErrorException(err.message + err?.query);
+        }
+      }
+
     async search(dto: any): Promise<Import_DepositPaginationModel> {
         try {
             const query = this.repository.createQueryBuilder('import-deposit').select('import-deposit')

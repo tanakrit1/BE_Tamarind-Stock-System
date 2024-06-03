@@ -80,3 +80,35 @@ export class CreateImport_DepositDto {
   
 
 }
+
+export class UpdateImport_DepositDto {
+    @IsOptional()
+    @IsNumber()
+    user_id?: number;
+  
+    @IsOptional()
+    @IsString()
+    @MaxLength(16, { message: 'quantity ต้องมีความยาวไม่เกิน' })
+    quantity: string;
+  
+    @IsOptional()
+    @IsNumber()
+    price: number;
+
+    @IsOptional()
+    @Transform(({ value }: TransformFnParams) => new Date(value))
+    @IsDate({message:'periodDate ต้องเป็นวันที่'})
+    periodDate: Date;
+  
+    @IsOptional()
+    @IsDate({message:'importDate ต้องเป็นวันที่'})
+    importDate: Date;
+    //-------------------------------------------------------------------//
+    @IsOptional()
+    @IsNumber()
+    product_id?: number;
+    //-------------------------------------------------------------------//
+    @IsOptional()
+    @IsNumber()
+    supplier_id?: number;
+}
