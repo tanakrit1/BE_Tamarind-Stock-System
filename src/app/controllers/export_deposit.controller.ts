@@ -37,6 +37,7 @@ export class Export_DepositController {
         const created = await this.export_depositService.create(dto);
         return Export_DepositResponseVm.convertToViewModel(created);
       } catch (err) {
+        console.log(err)
         throw HandleErrorException(err);
       }
     }    

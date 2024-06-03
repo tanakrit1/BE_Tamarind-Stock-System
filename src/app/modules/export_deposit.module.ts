@@ -5,9 +5,10 @@ import { SupplierModule } from "./supplier.module";
 import { Export_DepositController } from "../controllers/export_deposit.controller";
 import { Export_DepositService } from "../service/export_deposit.service";
 import { Export_DepositRepository } from "../repositories/export_deposit.repository";
+import { Import_DepositModule } from "./import_deposit.module";
 
 @Module({
-    imports: [TypeOrmModule.forFeature([Export_Deposit]),SupplierModule],
+    imports: [TypeOrmModule.forFeature([Export_Deposit]),SupplierModule,Import_DepositModule],
     controllers: [Export_DepositController],
     providers: [Export_DepositService, Export_DepositRepository],
     exports: [Export_DepositService],
