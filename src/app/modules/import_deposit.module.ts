@@ -10,6 +10,6 @@ import { SupplierModule } from "./supplier.module";
     imports: [TypeOrmModule.forFeature([Import_Deposit]),SupplierModule],
     controllers: [Import_DepositController],
     providers: [Import_DepositService, Import_DepositRepository],
-    exports: [Import_DepositService],
+    exports: [Import_DepositService,TypeOrmModule],
 })
 export class Import_DepositModule { }

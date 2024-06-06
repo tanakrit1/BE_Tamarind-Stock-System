@@ -10,6 +10,6 @@ import { SupplierModule } from "./supplier.module";
     imports: [TypeOrmModule.forFeature([Transaction_Import]),SupplierModule],
     controllers: [Transaction_ImportController],
     providers: [Transaction_ImportService, Transaction_ImportRepository],
-    exports: [Transaction_ImportService],
+    exports: [Transaction_ImportService,TypeOrmModule],
 })
 export class Transaction_ImportModule { }

@@ -10,6 +10,6 @@ import { CustomerModule } from "./customer.module";
     imports: [TypeOrmModule.forFeature([Transaction_Export]),CustomerModule],
     controllers: [Transaction_ExportController],
     providers: [Transaction_ExportService, Transaction_ExportRepository],
-    exports: [Transaction_ExportService],
+    exports: [Transaction_ExportService,TypeOrmModule],
 })
 export class Transaction_ExportModule { }

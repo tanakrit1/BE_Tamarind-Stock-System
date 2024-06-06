@@ -16,19 +16,32 @@ import { Transaction_ImportModule } from './transaction_import.module';
 import { Transaction_ExportModule } from './transaction_export.module';
 import { Import_DepositModule } from './import_deposit.module';
 import { Export_DepositModule } from './export_deposit.module';
+import { ReportModule } from './report.module';
 
 @Module({
   imports: [
     TypeOrmModule.forRoot({
     type: 'mysql',
-    host: 'localhost',
+    host: '103.30.126.89',
     port: 3306,
-    username: 'root',
-    password: '',
+    username: 'sa',
+    password: 'Tamarind@2024#',
     database: 'tamarind-stock',
     entities: ['dist/**/*.entity{.ts,.js}'],
     subscribers:[ProductSubscriber,SupplierSubscriber,CustomerSubscriber],
     synchronize: true,
+
+    // type: 'mysql',
+    // host: 'localhost',
+    // port: 3306,
+    // username: 'root',
+    // password: '',
+    // database: 'tamarind-stock',
+    // entities: ['dist/**/*.entity{.ts,.js}'],
+    // subscribers:[ProductSubscriber,SupplierSubscriber,CustomerSubscriber],
+    // synchronize: true,
+
+    
   }),
   UserModule,
   AuthModule,
@@ -39,7 +52,8 @@ import { Export_DepositModule } from './export_deposit.module';
   Transaction_ImportModule,
   Transaction_ExportModule,
   Import_DepositModule,
-  Export_DepositModule
+  Export_DepositModule,
+  ReportModule
 ],
   controllers: [AppController],
   providers: [AppService],
