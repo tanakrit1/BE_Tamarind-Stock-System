@@ -9,6 +9,18 @@ export class ReportController {
         private readonly reportService: ReportService,
     ) { }
 
+    @Post('checkStock')
+    async checkStock(
+        @Body() req,
+    ) {
+        try {
+            const reported = await this.reportService.checkStock(req);
+            return ReportResponseVm.convertToViewModel(reported);
+        } catch (err) {
+            throw HandleErrorException(err);
+        }
+    }
+
     @Post('reportstock')
     async reportstock(
         @Body() req,

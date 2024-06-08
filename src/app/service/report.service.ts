@@ -22,6 +22,58 @@ export class ReportService {
     
     ) { }
 
+    async checkStock(req) {
+        try {
+            const query = `
+            SELECT 
+                p.specialID, 
+                p.name,
+                COALESCE(
+                    (SELECT SUM(ti.quantity) 
+                     FROM \`transaction-import\` ti 
+                     WHERE ti.productId = p.id AND ti.typeAction = 'ซื้อ-ขาย'), 0
+                ) AS import_ซื้อขาย_quantity,
+                COALESCE(
+                    (SELECT SUM(te.quantity) 
+                     FROM \`transaction-export\` te 
+                     WHERE te.productId = p.id AND te.typeAction = 'ซื้อ-ขาย'), 0
+                ) AS export_ซื้อขาย_quantity,
+                COALESCE(
+                    (SELECT SUM(te.quantity) 
+                     FROM \`transaction-export\` te 
+                     WHERE te.productId = p.id AND te.typeAction = 'แปรรูป'), 0
+                ) AS export_แปรรูป_quantity,
+                (
+                    COALESCE(
+                        (SELECT SUM(ti.quantity) 
+                         FROM \`transaction-import\` ti 
+                         WHERE ti.productId = p.id AND ti.typeAction = 'ซื้อ-ขาย'), 0
+                    ) - 
+                    COALESCE(
+                        (SELECT SUM(te.quantity) 
+                         FROM \`transaction-export\` te 
+                         WHERE te.productId = p.id AND te.typeAction = 'ซื้อ-ขาย'), 0
+                    ) - 
+                    COALESCE(
+                        (SELECT SUM(te.quantity) 
+                         FROM \`transaction-export\` te 
+                         WHERE te.productId = p.id AND te.typeAction = 'แปรรูป'), 0
+                    )
+                ) AS remaining_ซื้อขาย_แปรรูป
+            FROM 
+                product p
+             WHERE  p.id = ${req.product_id}
+                ;
+        `;
+        const results = await this.productRepository.query(query);
+        return results;
+   
+        } catch (err) {
+            console.log(err)
+            throw new InternalServerErrorException(err.message + err?.query);
+        }
+    }
+
     async reportstock(req) {
         try {
             const query = `

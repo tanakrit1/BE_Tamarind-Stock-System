@@ -1,4 +1,4 @@
-import { Module } from "@nestjs/common";
+import { Module, forwardRef } from "@nestjs/common";
 import { ReportController } from "../controllers/report.controller";
 import { ReportService } from "../service/report.service";
 import { ProductModule } from "./product.module";
@@ -10,10 +10,11 @@ import { Import_DepositModule } from "./import_deposit.module";
     imports: [
         ProductModule,
         Transaction_ImportModule,
-        Transaction_ExportModule,
+        forwardRef(() => Transaction_ExportModule),
         Import_DepositModule
     ],
     controllers: [ReportController],
     providers: [ReportService],
+    exports: [ReportService],
 })
 export class ReportModule { }
