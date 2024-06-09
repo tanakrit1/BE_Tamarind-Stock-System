@@ -145,7 +145,7 @@ export class ReportService {
             const results = await this.productRepository.query(query);
             return plainToInstance(ReportPaginationModel, {
                 reports: results,
-                totalItems: totalCount,
+                totalItems: Number(totalCount),
             } as ReportPaginationModel);
         } catch (err) {
             console.log(err)
