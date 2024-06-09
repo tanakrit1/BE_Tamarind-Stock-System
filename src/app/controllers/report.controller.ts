@@ -1,7 +1,8 @@
 import { Body, Controller, Post } from "@nestjs/common";
 import { ReportService } from "../service/report.service";
 import { HandleErrorException } from "../exceptions/handleErrorException.exception";
-import { ReportResponseVm } from "../view-model/report/report.vm";
+import { ReportPaginationVm, ReportResponseVm } from "../view-model/report/report.vm";
+import { PaginationMetadataModel } from "../models/base.model";
 
 @Controller('report')
 export class ReportController {
@@ -27,7 +28,12 @@ export class ReportController {
     ) {
         try {
             const reported = await this.reportService.reportstock(req);
-            return ReportResponseVm.convertToViewModel(reported);
+            const pagination: PaginationMetadataModel = {
+                page: req.page,
+                perPage: req.limit,
+                totalItems: reported.totalItems,
+            };
+            return ReportPaginationVm.convertToViewModel(reported, pagination)
         } catch (err) {
             throw HandleErrorException(err);
         }

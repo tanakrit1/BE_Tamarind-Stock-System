@@ -5,21 +5,23 @@ import { Product } from "src/database/entities/product.entity";
 import { Transaction_Export } from "src/database/entities/transaction_export.entity";
 import { Transaction_Import } from "src/database/entities/transaction_import.entity";
 import { Repository } from "typeorm";
+import { ReportPaginationModel } from "../models/report.model";
+import { plainToInstance } from "class-transformer";
 
 
 @Injectable()
 export class ReportService {
     constructor(
-     
-            @InjectRepository(Product)
-            private readonly productRepository: Repository<Product>,
-            @InjectRepository(Transaction_Import)
-            private readonly transactionImportRepository: Repository<Transaction_Import>,
-            @InjectRepository(Transaction_Export)
-            private readonly transactionExportRepository: Repository<Transaction_Export>,
-            @InjectRepository(Import_Deposit)
-            private readonly importDepositRepository: Repository<Import_Deposit>,
-    
+
+        @InjectRepository(Product)
+        private readonly productRepository: Repository<Product>,
+        @InjectRepository(Transaction_Import)
+        private readonly transactionImportRepository: Repository<Transaction_Import>,
+        @InjectRepository(Transaction_Export)
+        private readonly transactionExportRepository: Repository<Transaction_Export>,
+        @InjectRepository(Import_Deposit)
+        private readonly importDepositRepository: Repository<Import_Deposit>,
+
     ) { }
 
     async checkStock(req) {
@@ -63,19 +65,34 @@ export class ReportService {
             FROM 
                 product p
              WHERE  p.id = ${req.product_id}
+          
+              AND  p.deletedAt is null
+             
                 ;
         `;
-        const results = await this.productRepository.query(query);
-        return results;
-   
+            const results = await this.productRepository.query(query);
+            return results;
+
         } catch (err) {
             console.log(err)
             throw new InternalServerErrorException(err.message + err?.query);
         }
     }
 
-    async reportstock(req) {
+    async reportstock(req): Promise<ReportPaginationModel> {
         try {
+            const countQuery = `
+            SELECT 
+                COUNT(*) as total
+            FROM 
+                product p
+            WHERE
+                 p.deletedAt is null
+                ;`;
+
+            const countResult = await this.productRepository.query(countQuery);
+            const totalCount = countResult[0].total;
+
             const query = `
             SELECT 
                 p.specialID, 
@@ -119,60 +136,68 @@ export class ReportService {
                     ), 0
                 ) AS remaining_ฝากเก็บ
             FROM 
-                product p;
+                product p
+            WHERE
+                 p.deletedAt is null
+                 LIMIT ${req.limit} OFFSET ${(req.page - 1) * req.limit}
+                ;
         `;
-        const results = await this.productRepository.query(query);
-        return results;
-        //     const queryBuilder = this.productRepository.createQueryBuilder('p');
-
-        // queryBuilder
-        //     .select(['p.specialID', 'p.name'])
-        //     .addSelect(subQuery => {
-        //         return subQuery
-        //             .select('COALESCE(SUM(ti.quantity), 0)')
-        //             .from(Transaction_Import, 'ti')
-        //             .where('ti.productId = p.id')
-        //             .andWhere('ti.typeAction = :typeAction', { typeAction: 'ซื้อ-ขาย' });
-        //     }, 'import_ซื้อขาย_quantity')
-
-        //     .addSelect(subQuery => {
-        //         return subQuery
-        //             .select('COALESCE(SUM(te.quantity), 0)')
-        //             .from(Transaction_Export, 'te')
-        //             .where('te.productId = p.id')
-        //             .andWhere('te.typeAction = :typeAction', { typeAction: 'ซื้อ-ขาย' });
-        //     }, 'export_ซื้อขาย_quantity')
-
-        //     .addSelect(subQuery => {
-        //         return subQuery
-        //             .select('COALESCE(SUM(te.quantity), 0)')
-        //             .from(Transaction_Export, 'te')
-        //             .where('te.productId = p.id')
-        //             .andWhere('te.typeAction = :typeAction', { typeAction: 'แปรรูป' });
-        //     }, 'export_แปรรูป_quantity')
-
-        //     .addSelect(subQuery => {
-        //         return subQuery
-        //             .select('COALESCE(SUM(ti.quantity), 0) - COALESCE(SUM(te.quantity), 0) - COALESCE(SUM(te2.quantity), 0)')
-        //             .from(Transaction_Import, 'ti')
-        //             .leftJoin(Transaction_Export, 'te', 'te.productId = p.id AND te.typeAction = "ซื้อ-ขาย"')
-        //             .leftJoin(Transaction_Export, 'te2', 'te2.productId = p.id AND te2.typeAction = "แปรรูป"')
-        //             .where('ti.productId = p.id')
-        //             .andWhere('ti.typeAction = :typeAction', { typeAction: 'ซื้อ-ขาย' });
-        //     }, 'remaining_ซื้อขาย')
-
-        //     .addSelect(subQuery => {
-        //         return subQuery
-        //             .select('COALESCE(SUM(ide.remain), 0)')
-        //             .from(Import_Deposit, 'ide')
-        //             .where('ide.productId = p.id');
-        //     }, 'remaining_ฝากเก็บ');
-
-
-        // return await queryBuilder.getRawMany()       
+            const results = await this.productRepository.query(query);
+            return plainToInstance(ReportPaginationModel, {
+                reports: results,
+                totalItems: totalCount,
+            } as ReportPaginationModel);
         } catch (err) {
             console.log(err)
             throw new InternalServerErrorException(err.message + err?.query);
         }
     }
+
+    //     const queryBuilder = this.productRepository.createQueryBuilder('p');
+
+    // queryBuilder
+    //     .select(['p.specialID', 'p.name'])
+    //     .addSelect(subQuery => {
+    //         return subQuery
+    //             .select('COALESCE(SUM(ti.quantity), 0)')
+    //             .from(Transaction_Import, 'ti')
+    //             .where('ti.productId = p.id')
+    //             .andWhere('ti.typeAction = :typeAction', { typeAction: 'ซื้อ-ขาย' });
+    //     }, 'import_ซื้อขาย_quantity')
+
+    //     .addSelect(subQuery => {
+    //         return subQuery
+    //             .select('COALESCE(SUM(te.quantity), 0)')
+    //             .from(Transaction_Export, 'te')
+    //             .where('te.productId = p.id')
+    //             .andWhere('te.typeAction = :typeAction', { typeAction: 'ซื้อ-ขาย' });
+    //     }, 'export_ซื้อขาย_quantity')
+
+    //     .addSelect(subQuery => {
+    //         return subQuery
+    //             .select('COALESCE(SUM(te.quantity), 0)')
+    //             .from(Transaction_Export, 'te')
+    //             .where('te.productId = p.id')
+    //             .andWhere('te.typeAction = :typeAction', { typeAction: 'แปรรูป' });
+    //     }, 'export_แปรรูป_quantity')
+
+    //     .addSelect(subQuery => {
+    //         return subQuery
+    //             .select('COALESCE(SUM(ti.quantity), 0) - COALESCE(SUM(te.quantity), 0) - COALESCE(SUM(te2.quantity), 0)')
+    //             .from(Transaction_Import, 'ti')
+    //             .leftJoin(Transaction_Export, 'te', 'te.productId = p.id AND te.typeAction = "ซื้อ-ขาย"')
+    //             .leftJoin(Transaction_Export, 'te2', 'te2.productId = p.id AND te2.typeAction = "แปรรูป"')
+    //             .where('ti.productId = p.id')
+    //             .andWhere('ti.typeAction = :typeAction', { typeAction: 'ซื้อ-ขาย' });
+    //     }, 'remaining_ซื้อขาย')
+
+    //     .addSelect(subQuery => {
+    //         return subQuery
+    //             .select('COALESCE(SUM(ide.remain), 0)')
+    //             .from(Import_Deposit, 'ide')
+    //             .where('ide.productId = p.id');
+    //     }, 'remaining_ฝากเก็บ');
+
+
+    // return await queryBuilder.getRawMany()   
 }
