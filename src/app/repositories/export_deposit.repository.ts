@@ -18,7 +18,7 @@ export class Export_DepositRepository {
             const query = this.repository.createQueryBuilder('export-deposit').select('export-deposit')
                 .addSelect(['user.id', 'user.firstName', 'user.lastName', 'user.role'])
                 .leftJoin('export-deposit.user', 'user')
-                .leftJoinAndSelect('export-deposit.Import_Deposit', 'import-deposit')
+                .leftJoinAndSelect('export-deposit.Import_Deposit', 'importDeposit')
                 .leftJoinAndSelect('export-deposit.product', 'product')
                 .leftJoinAndSelect('export-deposit.supplier', 'supplier')
             applyRepositorySortingModel(query, 'export-deposit', dto);
@@ -33,6 +33,7 @@ export class Export_DepositRepository {
                 totalItems: count,
             } as Export_DepositPaginationModel);
         } catch (err) {
+            console.log(err)
             throw new InternalServerErrorException(err.message + err?.query);
         }
     }

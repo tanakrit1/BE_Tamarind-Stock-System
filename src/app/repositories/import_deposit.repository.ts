@@ -29,7 +29,7 @@ export class Import_DepositRepository {
             const query = this.repository.createQueryBuilder('import-deposit').select('import-deposit')
                 .addSelect(['user.id', 'user.firstName', 'user.lastName', 'user.role'])
                 .leftJoin('import-deposit.user', 'user')
-                .leftJoinAndSelect('import-deposit.Export_Deposits', 'export-deposits')
+                .leftJoinAndSelect('import-deposit.Export_Deposits', 'exportDeposit')
                 .leftJoinAndSelect('import-deposit.product', 'product')
                 .leftJoinAndSelect('import-deposit.supplier', 'supplier')
             applyRepositorySortingModel(query, 'import-deposit', dto);
