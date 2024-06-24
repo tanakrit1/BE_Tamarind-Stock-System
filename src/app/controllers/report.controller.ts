@@ -38,4 +38,24 @@ export class ReportController {
             throw HandleErrorException(err);
         }
     }
+
+    @Post('dashboard')
+    async dashboard( 
+        @Body() req,
+    ){
+        try{
+            req.page = 1
+            req.limit = 9999
+            const reported = await this.reportService.stockDashBoard(req);
+            let data = {
+                remaining: reported?.reports,
+                productsToDeliverToday:[]
+            }
+            return ReportResponseVm.convertToViewModel(data) 
+
+        }catch(err){
+            throw HandleErrorException(err);
+        }
+    }
+        
 }

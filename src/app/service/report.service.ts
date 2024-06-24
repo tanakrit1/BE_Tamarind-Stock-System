@@ -153,6 +153,116 @@ export class ReportService {
         }
     }
 
+    async stockDashBoard(req): Promise<ReportPaginationModel> {
+        try {
+            const countQuery = `
+            SELECT 
+                COUNT(*) as total
+            FROM 
+                product p
+            WHERE
+                 p.deletedAt is null
+                ;`;
+
+            const countResult = await this.productRepository.query(countQuery);
+            const totalCount = countResult[0].total;
+
+            const query = `
+           SELECT 
+                p.specialID, 
+                p.name,
+                COALESCE(
+                    (SELECT SUM(CAST(ti.quantity AS DECIMAL)) 
+                    FROM \`transaction-import\` ti 
+                    WHERE ti.productId = p.id AND ti.typeAction = 'ซื้อ-ขาย' 
+                    AND MONTH(ti.importDate) = MONTH(CURRENT_DATE())
+                    AND YEAR(ti.importDate) = YEAR(CURRENT_DATE())
+                    ), 0
+                ) AS import_ซื้อขาย_quantity,
+                COALESCE(
+                    (SELECT SUM(CAST(te.quantity AS DECIMAL)) 
+                    FROM \`transaction-export\` te 
+                    WHERE te.productId = p.id AND te.typeAction = 'ซื้อ-ขาย'
+                    AND MONTH(te.exportDate) = MONTH(CURRENT_DATE())
+                    AND YEAR(te.exportDate) = YEAR(CURRENT_DATE())
+                    ), 0
+                ) AS export_ซื้อขาย_quantity,
+                COALESCE(
+                    (SELECT SUM(CAST(te.quantity AS DECIMAL)) 
+                    FROM \`transaction-export\` te 
+                    WHERE te.productId = p.id AND te.typeAction = 'แปรรูป'
+                    AND MONTH(te.exportDate) = MONTH(CURRENT_DATE())
+                    AND YEAR(te.exportDate) = YEAR(CURRENT_DATE())
+                    ), 0
+                ) AS export_แปรรูป_quantity,
+                (
+                    COALESCE(
+                        (SELECT SUM(CAST(ti.quantity AS DECIMAL)) 
+                        FROM \`transaction-import\` ti 
+                        WHERE ti.productId = p.id AND ti.typeAction = 'ซื้อ-ขาย'
+                        AND MONTH(ti.importDate) = MONTH(CURRENT_DATE())
+                        AND YEAR(ti.importDate) = YEAR(CURRENT_DATE())
+                        ), 0
+                    ) - 
+                    COALESCE(
+                        (SELECT SUM(CAST(te.quantity AS DECIMAL)) 
+                        FROM \`transaction-export\` te 
+                        WHERE te.productId = p.id AND te.typeAction = 'ซื้อ-ขาย'
+                        AND MONTH(te.exportDate) = MONTH(CURRENT_DATE())
+                        AND YEAR(te.exportDate) = YEAR(CURRENT_DATE())
+                        ), 0
+                    ) - 
+                    COALESCE(
+                        (SELECT SUM(CAST(te.quantity AS DECIMAL)) 
+                        FROM \`transaction-export\` te 
+                        WHERE te.productId = p.id AND te.typeAction = 'แปรรูป'
+                        AND MONTH(te.exportDate) = MONTH(CURRENT_DATE())
+                        AND YEAR(te.exportDate) = YEAR(CURRENT_DATE())
+                        ), 0
+                    )
+                ) AS remaining_ซื้อขาย,
+                COALESCE(
+                    (SELECT SUM(CAST(ide.remain AS DECIMAL)) 
+                    FROM \`import-deposit\` ide  
+                    WHERE ide.productId = p.id
+                    AND MONTH(ide.importDate) = MONTH(CURRENT_DATE())
+                    AND YEAR(ide.importDate) = YEAR(CURRENT_DATE())
+                    ), 0
+                ) AS remaining_ฝากเก็บ
+            FROM 
+                product p
+            WHERE
+                 p.deletedAt is null
+                 LIMIT ${req.limit} OFFSET ${(req.page - 1) * req.limit}
+                ;
+        `;
+            const results = await this.productRepository.query(query);
+            return plainToInstance(ReportPaginationModel, {
+                reports: results,
+                totalItems: Number(totalCount),
+            } as ReportPaginationModel);
+        } catch (err) {
+            console.log(err)
+            throw new InternalServerErrorException(err.message + err?.query);
+        }
+    }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
     //     const queryBuilder = this.productRepository.createQueryBuilder('p');
 
     // queryBuilder
