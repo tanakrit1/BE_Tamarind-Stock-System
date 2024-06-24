@@ -248,6 +248,73 @@ export class ReportService {
     }
 
 
+    async productExportToday(req): Promise<ReportPaginationModel>{
+        try {
+            const countQuery = `
+            SELECT 
+                COUNT(*) as total
+            FROM 
+                product p
+            WHERE
+                 p.deletedAt is null
+                ;`;
+
+            const countResult = await this.productRepository.query(countQuery);
+            const totalCount = countResult[0].total;
+
+            const query = `
+                SELECT 
+            p.specialID, 
+            p.name,
+            COALESCE(
+                (SELECT SUM(CAST(te.quantity AS DECIMAL)) 
+                FROM \`transaction-export\` te 
+                WHERE te.productId = p.id AND te.typeAction = 'ซื้อ-ขาย'
+                AND DATE(te.exportDate) = CURRENT_DATE()
+                ), 0
+            ) AS exportToday_ซื้อขาย,
+            COALESCE(
+                (SELECT SUM(CAST(te.quantity AS DECIMAL)) 
+                FROM \`transaction-export\` te 
+                WHERE te.productId = p.id AND te.typeAction = 'แปรรูป'
+                AND DATE(te.exportDate) = CURRENT_DATE()
+                ), 0
+            ) AS exportToday_แปรรูป,
+            (
+                COALESCE(
+                    (SELECT SUM(CAST(te.quantity AS DECIMAL)) 
+                    FROM \`transaction-export\` te 
+                    WHERE te.productId = p.id AND te.typeAction = 'ซื้อ-ขาย'
+                    AND DATE(te.exportDate) = CURRENT_DATE()
+                    ), 0
+                ) + 
+                COALESCE(
+                    (SELECT SUM(CAST(te.quantity AS DECIMAL)) 
+                    FROM \`transaction-export\` te 
+                    WHERE te.productId = p.id AND te.typeAction = 'แปรรูป'
+                    AND DATE(te.exportDate) = CURRENT_DATE()
+                    ), 0
+                )
+            ) AS sumToday
+        FROM 
+            product p
+            WHERE
+                 p.deletedAt is null
+                 LIMIT ${req.limit} OFFSET ${(req.page - 1) * req.limit}
+                ;
+        `;
+            const results = await this.productRepository.query(query);
+            return plainToInstance(ReportPaginationModel, {
+                reports: results,
+                totalItems: Number(totalCount),
+            } as ReportPaginationModel);
+        } catch (err) {
+            console.log(err)
+            throw new InternalServerErrorException(err.message + err?.query);
+        }
+    }
+
+
 
 
 

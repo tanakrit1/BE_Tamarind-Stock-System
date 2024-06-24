@@ -46,10 +46,11 @@ export class ReportController {
         try{
             req.page = 1
             req.limit = 9999
-            const reported = await this.reportService.stockDashBoard(req);
+            const reported1= await this.reportService.stockDashBoard(req);
+            const reported2 = await this.reportService.productExportToday(req);
             let data = {
-                remaining: reported?.reports,
-                productsToDeliverToday:[]
+                remaining: reported1?.reports,
+                productsToDeliverToday:reported2?.reports
             }
             return ReportResponseVm.convertToViewModel(data) 
 
