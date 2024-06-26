@@ -314,6 +314,63 @@ export class ReportService {
         }
     }
 
+    async saleDashBoard(req): Promise<ReportPaginationModel>{
+        try{
+            const countQuery = `
+            SELECT 
+                COUNT(*) as total
+            FROM 
+                product p
+            WHERE
+                 p.deletedAt is null
+                ;`;
+
+            const countResult = await this.productRepository.query(countQuery);
+            const totalCount = countResult[0].total;
+
+            const query = `
+            SELECT 
+                p.specialID, 
+                p.name,
+                COALESCE(
+                    (SELECT SUM(CAST(te.price AS DECIMAL)) 
+                    FROM \`transaction-export\` te 
+                    WHERE te.productId = p.id AND te.typeAction = 'ซื้อ-ขาย'
+                    AND DATE(te.exportDate) = CURRENT_DATE()
+                    ), 0
+                ) AS saleToday,
+                COALESCE(
+                    (SELECT SUM(CAST(te.price AS DECIMAL)) 
+                    FROM \`transaction-export\` te 
+                    WHERE te.productId = p.id AND te.typeAction = 'ซื้อ-ขาย'
+                    AND MONTH(te.exportDate) = MONTH(CURRENT_DATE())
+                    AND YEAR(te.exportDate) = YEAR(CURRENT_DATE())
+                    ), 0
+                ) AS saleMonth,
+                COALESCE(
+                    (SELECT COUNT(DISTINCT te.customerId) 
+                    FROM \`transaction-export\` te 
+                    WHERE te.productId = p.id AND te.typeAction = 'ซื้อ-ขาย'
+                    AND MONTH(te.exportDate) = MONTH(CURRENT_DATE())
+                    AND YEAR(te.exportDate) = YEAR(CURRENT_DATE())
+                    ), 0
+                ) AS totalCustomerMonth
+            FROM 
+                product p
+             LIMIT ${req.limit} OFFSET ${(req.page - 1) * req.limit}
+            ;
+    `;
+        const results = await this.productRepository.query(query);
+        return plainToInstance(ReportPaginationModel, {
+            reports: results,
+            totalItems: Number(totalCount),
+        } as ReportPaginationModel);
+        }catch(err){
+            console.log(err)
+            throw new InternalServerErrorException(err.message + err?.query);
+        }
+    }
+
 
 
 
