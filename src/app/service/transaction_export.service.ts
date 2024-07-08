@@ -31,20 +31,40 @@ export class Transaction_ExportService {
         throw new BadRequestException(null, [`จำนวนคงเหลือ ${name} ${specialID} ไม่เพียงพอ: คงเหลือ ${remaining_ซื้อขาย_แปรรูป} `])
       }
     }
-
+  //-------------ถ้ามีอยู่เเล้วให้นำที่อยู่ที่ส่งมา บันทึกลง transation_export ----------//
+    let model= new Transaction_ExportModel()
     const customerExist = {
       ...(await this.customerService.findByPhone(dto.phone)),
       ...dto
     }
-    let customerModel = new CustomerModel();
-    customerModel = await this.customerService.create(customerExist);
 
-    const model: Transaction_ExportModel = plainToInstance(Transaction_ExportModel, {
-      ...dto,
-      user: dto.user_id,
-      product: dto.product_id,
-      customer: customerModel
-    })
+    let customerModel = new CustomerModel();
+    if(customerExist.id){
+      model = plainToInstance(Transaction_ExportModel, {
+        ...dto,
+        shipAddress:dto.address,
+        shipSubDistrict:dto.subDistric,
+        shipDistrict:dto.distric,
+        shipProvince:dto.province,
+        shipZipCode:dto.zipCode,
+        user: dto.user_id,
+        product: dto.product_id,
+        customer: customerExist.id
+      })
+    }else{
+      customerModel = await this.customerService.create(customerExist);
+      model = plainToInstance(Transaction_ExportModel, {
+        ...dto,
+        shipAddress:dto.address,
+        shipSubDistrict:dto.subDistric,
+        shipDistrict:dto.distric,
+        shipProvince:dto.province,
+        shipZipCode:dto.zipCode,
+        user: dto.user_id,
+        product: dto.product_id,
+        customer: customerModel
+      })
+    }
     return await this.transaction_exportRepository.save(model);
   }
 
