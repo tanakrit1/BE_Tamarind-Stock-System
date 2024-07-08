@@ -72,6 +72,7 @@ import { FilterModelDto, methodSorting } from 'src/app/dto/base/base.dto';
     page: number;
     perPage: number;
     totalItems: number;
+    sumquantity?: number;
   }
   
   export class PaginationMetadataResponseVm {
@@ -86,6 +87,9 @@ import { FilterModelDto, methodSorting } from 'src/app/dto/base/base.dto';
   
     @IsNumber()
     totalItems: number;
+
+    @IsNumber()
+    sumquantity?: number;
   
     static convertToViewModel(
       metadata: PaginationMetadata,
@@ -95,6 +99,7 @@ import { FilterModelDto, methodSorting } from 'src/app/dto/base/base.dto';
         perPage: metadata.perPage || metadata.totalItems,
         totalPage: Math.ceil(metadata.totalItems / (metadata.perPage || 1)),
         totalItems: metadata.totalItems,
+        sumquantity:metadata.sumquantity||0
       };
       return paginationMetadata;
     }

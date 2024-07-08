@@ -27,9 +27,17 @@ export class Transaction_ImportRepository {
             query.skip((dto.page - 1) * dto.limit).take(dto.limit);
             const queryResult = await query.getManyAndCount();
             const [transaction_imports, count] = queryResult;
+
+            const sumQuery = this.repository.createQueryBuilder('transaction-import')
+              .select('SUM(transaction-import.quantity)', 'sumquantity');
+            applyRepositoryQuickFilter(sumQuery, 'transaction-import', dto.filterModel);
+            applyRepositoryFilterModel(sumQuery, 'transaction-import', dto.filterModel);
+
+        const sumQuantityResult = await sumQuery.getRawOne();
             return plainToInstance(Transaction_ImportPaginationModel, {
                 transaction_imports: transaction_imports,
                 totalItems: count,
+                sumquantity:sumQuantityResult.sumquantity
             } as Transaction_ImportPaginationModel);
         } catch (err) {
             throw new InternalServerErrorException(err.message + err?.query);

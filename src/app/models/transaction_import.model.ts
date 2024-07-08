@@ -7,4 +7,5 @@ export class Transaction_ImportPaginationModel {
     @Type(() => Transaction_ImportModel)
     transaction_imports: Transaction_ImportModel[];
     totalItems: number;
+    sumquantity?:number;
 }
