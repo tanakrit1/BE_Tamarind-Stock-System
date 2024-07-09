@@ -19,6 +19,7 @@ export class Export_DepositController {
         const pagination: PaginationMetadataModel = {
           page: dto.page,
           perPage: dto.limit,
+          sumquantity:responses.sumquantity,
           totalItems: responses.totalItems,
         };
         return Export_DepositPaginationVm.convertToViewModel(responses, pagination)

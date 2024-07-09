@@ -7,4 +7,5 @@ export class Export_DepositPaginationModel {
     @Type(() => Export_DepositModel)
     export_deposits: Export_DepositModel[];
     totalItems: number;
+    sumquantity?: number;
 }

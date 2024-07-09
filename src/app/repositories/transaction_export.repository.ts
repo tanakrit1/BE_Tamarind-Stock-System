@@ -24,13 +24,26 @@ export class Transaction_ExportRepository {
             applyRepositorySortingModel(query, 'transaction-export', dto);
             applyRepositoryQuickFilter(query, 'transaction-export', dto.filterModel);
             applyRepositoryFilterModel(query, 'transaction-export', dto.filterModel);
-
             query.skip((dto.page - 1) * dto.limit).take(dto.limit);
             const queryResult = await query.getManyAndCount();
             const [transaction_exports, count] = queryResult;
+            
+            const sumQuery = this.repository.createQueryBuilder('transaction-export')
+            .select('transaction-export.id', 'transaction-export_id')
+            .addSelect('transaction-export.quantity', 'transaction_export_quantity')
+            .leftJoin('transaction-export.user', 'user')
+            .leftJoin('transaction-export.product', 'product')
+            .leftJoin('transaction-export.customer', 'customer')
+          applyRepositoryQuickFilter(sumQuery, 'transaction-export', dto.filterModel);
+          applyRepositoryFilterModel(sumQuery, 'transaction-export', dto.filterModel);
+           sumQuery.groupBy('transaction-export.id')
+           const sumQuantityResult = await sumQuery.getRawMany();
+           const sumquantity = sumQuantityResult.reduce((total, item) => total + parseFloat(item.transaction_export_quantity||0), 0);
+
             return plainToInstance(Transaction_ExportPaginationModel, {
                 transaction_exports: transaction_exports,
                 totalItems: count,
+                sumquantity:sumquantity
             } as Transaction_ExportPaginationModel);
         } catch (err) {
             throw new InternalServerErrorException(err.message + err?.query);

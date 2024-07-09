@@ -28,9 +28,24 @@ export class Export_DepositRepository {
             query.skip((dto.page - 1) * dto.limit).take(dto.limit);
             const queryResult = await query.getManyAndCount();
             const [export_deposits, count] = queryResult;
+
+            const sumQuery = this.repository.createQueryBuilder('export-deposit')
+            .select('export-deposit.id', 'export-deposit_id')
+            .addSelect('export-deposit.quantity', 'export_deposit_quantity')
+            .leftJoin('export-deposit.user', 'user')
+            .leftJoin('export-deposit.Import_Deposit', 'importDeposit')
+            .leftJoin('export-deposit.product', 'product')
+            .leftJoin('export-deposit.supplier', 'supplier')
+          applyRepositoryQuickFilter(sumQuery, 'export-deposit', dto.filterModel);
+          applyRepositoryFilterModel(sumQuery, 'export-deposit', dto.filterModel);
+           sumQuery.groupBy('export-deposit.id')
+           const sumQuantityResult = await sumQuery.getRawMany();
+           const sumquantity = sumQuantityResult.reduce((total, item) => total + parseFloat(item.export_deposit_quantity||0), 0);
+
             return plainToInstance(Export_DepositPaginationModel, {
                 export_deposits: export_deposits,
                 totalItems: count,
+                sumquantity:sumquantity
             } as Export_DepositPaginationModel);
         } catch (err) {
             console.log(err)

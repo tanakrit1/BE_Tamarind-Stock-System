@@ -7,4 +7,5 @@ export class Transaction_ExportPaginationModel {
     @Type(() => Transaction_ExportModel)
     transaction_exports: Transaction_ExportModel[];
     totalItems: number;
+    sumquantity?: number;
 }
