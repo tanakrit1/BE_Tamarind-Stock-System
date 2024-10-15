@@ -22,11 +22,11 @@ import { ReportModule } from './report.module';
   imports: [
     TypeOrmModule.forRoot({
     type: 'mysql',
-    host: '103.30.126.89',
-    port: 3306,
-    username: 'sa',
-    password: 'Tamarind@2024#',
-    database: 'tamarind-stock',
+    host: process.env.SQLSRV_HOST,
+    port: Number.parseInt(process.env.SQLSRV_PORT, 10),
+    username: process.env.SQLSRV_USER,
+    password: process.env.SQLSRV_PASS,
+    database: process.env.SQLSRV_NAME,
     entities: ['dist/**/*.entity{.ts,.js}'],
     subscribers:[ProductSubscriber,SupplierSubscriber,CustomerSubscriber],
     synchronize: true,
