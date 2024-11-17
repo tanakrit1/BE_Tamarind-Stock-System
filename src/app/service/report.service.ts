@@ -179,6 +179,11 @@ export class ReportService {
                     AND YEAR(ti.importDate) = YEAR(CURRENT_DATE())
                     ), 0
                 ) AS import_ซื้อขาย_quantity,
+                 COALESCE(
+                    (SELECT AVG(ti.price / ti.quantity) 
+                     FROM \`transaction-import\` ti 
+                     WHERE ti.productId = p.id AND ti.typeAction = 'ซื้อ-ขาย'), 0
+                ) AS import_ซื้อขาย_average,
                 COALESCE(
                     (SELECT SUM(CAST(te.quantity AS DECIMAL)) 
                     FROM \`transaction-export\` te 

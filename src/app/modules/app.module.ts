@@ -17,6 +17,7 @@ import { Transaction_ExportModule } from './transaction_export.module';
 import { Import_DepositModule } from './import_deposit.module';
 import { Export_DepositModule } from './export_deposit.module';
 import { ReportModule } from './report.module';
+import { ProductTypeModule } from './producttype.module';
 
 @Module({
   imports: [
@@ -53,7 +54,8 @@ import { ReportModule } from './report.module';
   Transaction_ExportModule,
   Import_DepositModule,
   Export_DepositModule,
-  ReportModule
+  ReportModule,
+  ProductTypeModule
 ],
   controllers: [AppController],
   providers: [AppService],

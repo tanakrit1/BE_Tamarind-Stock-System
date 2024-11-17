@@ -32,7 +32,10 @@ export class ProductService {
         if(check){
             throw new NotFoundException([`สินค้านี้มีอยู่เเล้ว ${dto.name} ประเภท ${dto.type}`]);
         }
-        const model: ProductModel = plainToInstance(ProductModel, dto as ProductModel)
+        const model: ProductModel = plainToInstance(ProductModel, {
+            ...dto,
+            ProductTypes:dto?.productType_Id
+        })
         return await this.productRepository.save(model);
     }
 
@@ -41,10 +44,10 @@ export class ProductService {
         if(check){
             throw new NotFoundException([`สินค้านี้มีอยู่เเล้ว ${dto.name} ประเภท ${dto.type}`]);
         }
-        const model: ProductModel = plainToInstance(
-            ProductModel,
-          dto as ProductModel,
-        );
+        const model: ProductModel = plainToInstance(ProductModel, {
+            ...dto,
+            ProductTypes:dto?.productType_Id
+        })
         return await this.productRepository.save(model);
     }
 

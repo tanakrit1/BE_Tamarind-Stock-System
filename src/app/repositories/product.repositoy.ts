@@ -56,7 +56,8 @@ export class ProductRepository {
 
     async search(dto: any): Promise<ProductPaginationModel> {
         try {
-            const query = this.repository.createQueryBuilder('product').select('product');
+            const query = this.repository.createQueryBuilder('product').select('product')
+            .leftJoinAndSelect('product.ProductTypes','producttype')
             applyRepositorySortingModel(query, 'product', dto);
             applyRepositoryQuickFilter(query, 'product', dto.filterModel, []);
             applyRepositoryFilterModel(query, 'product', dto.filterModel);

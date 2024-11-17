@@ -1,9 +1,10 @@
-import { Column, Entity, OneToMany } from "typeorm";
+import { Column, Entity, ManyToOne, OneToMany } from "typeorm";
 import { BaseEntity } from "./base.entity";
 import { Transaction_Import } from "./transaction_import.entity";
 import { Transaction_Export } from "./transaction_export.entity";
 import { Import_Deposit } from "./import_deposit.entity";
 import { Export_Deposit } from "./export_disposit.entity";
+import { ProductType } from "./producttype.entity";
 
 @Entity({ name: 'product' })
 export class Product extends BaseEntity {
@@ -15,7 +16,10 @@ export class Product extends BaseEntity {
     name: string;  
 
     @Column({ name: 'type', type: 'nvarchar', length: 32 })
-    type: string;  
+    type: string; 
+
+    @Column({ name: 'unit', type: 'nvarchar', length: 16 })
+    unit: string; 
 
     @Column({
         name: 'price',
@@ -46,4 +50,8 @@ export class Product extends BaseEntity {
 
     @OneToMany(() => Export_Deposit, (Export_Deposit) => Export_Deposit.product)
     Export_Deposits: Export_Deposit[];
+
+    @ManyToOne(() => ProductType, (ProductType) => ProductType.products, { nullable: true })
+    ProductTypes: ProductType;
+
 }

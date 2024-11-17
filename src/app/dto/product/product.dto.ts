@@ -33,6 +33,15 @@ export class CreateProductDto {
     @IsOptional()
     @IsNumber()
     priceOut: number;
+
+    @IsOptional()
+    @IsString()
+    @MaxLength(16, { message: 'unit ต้องมีความยาวไม่เกิน' })
+    unit: string;
+
+    @IsNotEmpty()
+    @IsNumber()
+    productType_Id?: number;
 }
 
 export class UpdateProductDto {
@@ -59,4 +68,13 @@ export class UpdateProductDto {
     @IsOptional()
     @IsNumber()
     priceOut: number;
+
+    @IsOptional()
+    @IsString()
+    @MaxLength(16, { message: 'unit ต้องมีความยาวไม่เกิน' })
+    unit: string;
+
+    @IsNotEmpty()
+    @IsNumber()
+    productType_Id?: number;
 }
