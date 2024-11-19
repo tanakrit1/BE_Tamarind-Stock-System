@@ -19,6 +19,7 @@ export class Transaction_ImportRepository {
                 .addSelect(['user.id', 'user.firstName', 'user.lastName', 'user.role'])
                 .leftJoin('transaction-import.user', 'user')
                 .leftJoinAndSelect('transaction-import.product', 'product')
+                .leftJoinAndSelect('product.ProductTypes', 'producttype')
                 .leftJoinAndSelect('transaction-import.supplier', 'supplier')
             applyRepositorySortingModel(query, 'transaction-import', dto);
             applyRepositoryQuickFilter(query, 'transaction-import', dto.filterModel);
@@ -34,6 +35,7 @@ export class Transaction_ImportRepository {
               .addSelect('transaction-import.quantity', 'transaction_import_quantity')
               .leftJoin('transaction-import.user', 'user')
               .leftJoin('transaction-import.product', 'product')
+              .leftJoin('product.ProductTypes', 'producttype')
               .leftJoin('transaction-import.supplier', 'supplier')
             applyRepositoryQuickFilter(sumQuery, 'transaction-import', dto.filterModel);
             applyRepositoryFilterModel(sumQuery, 'transaction-import', dto.filterModel);

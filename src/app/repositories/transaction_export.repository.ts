@@ -20,6 +20,7 @@ export class Transaction_ExportRepository {
                 .addSelect(['user.id', 'user.firstName', 'user.lastName', 'user.role'])
                 .leftJoin('transaction-export.user', 'user')
                 .leftJoinAndSelect('transaction-export.product', 'product')
+                .leftJoinAndSelect('product.ProductTypes', 'producttype')
                 .leftJoinAndSelect('transaction-export.customer', 'customer')
             applyRepositorySortingModel(query, 'transaction-export', dto);
             applyRepositoryQuickFilter(query, 'transaction-export', dto.filterModel);
@@ -33,6 +34,7 @@ export class Transaction_ExportRepository {
             .addSelect('transaction-export.quantity', 'transaction_export_quantity')
             .leftJoin('transaction-export.user', 'user')
             .leftJoin('transaction-export.product', 'product')
+            .leftJoin('product.ProductTypes', 'producttype')
             .leftJoin('transaction-export.customer', 'customer')
           applyRepositoryQuickFilter(sumQuery, 'transaction-export', dto.filterModel);
           applyRepositoryFilterModel(sumQuery, 'transaction-export', dto.filterModel);

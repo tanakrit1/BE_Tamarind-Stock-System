@@ -20,6 +20,7 @@ export class Export_DepositRepository {
                 .leftJoin('export-deposit.user', 'user')
                 .leftJoinAndSelect('export-deposit.Import_Deposit', 'importDeposit')
                 .leftJoinAndSelect('export-deposit.product', 'product')
+                .leftJoinAndSelect('product.ProductTypes', 'producttype')
                 .leftJoinAndSelect('export-deposit.supplier', 'supplier')
             applyRepositorySortingModel(query, 'export-deposit', dto);
             applyRepositoryQuickFilter(query, 'export-deposit', dto.filterModel);
@@ -35,6 +36,7 @@ export class Export_DepositRepository {
             .leftJoin('export-deposit.user', 'user')
             .leftJoin('export-deposit.Import_Deposit', 'importDeposit')
             .leftJoin('export-deposit.product', 'product')
+            .leftJoin('product.ProductTypes', 'producttype')
             .leftJoin('export-deposit.supplier', 'supplier')
           applyRepositoryQuickFilter(sumQuery, 'export-deposit', dto.filterModel);
           applyRepositoryFilterModel(sumQuery, 'export-deposit', dto.filterModel);
